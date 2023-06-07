@@ -34,6 +34,7 @@ require (
 	github.com/spf13/cobra v1.6.1
 	github.com/spf13/viper v1.13.0
 	github.com/stretchr/testify v1.8.1
+	github.com/tjfoc/gmsm v1.4.0
 	golang.org/x/crypto v0.5.0
 	golang.org/x/net v0.7.0
 	google.golang.org/grpc v1.52.0
