@@ -5,8 +5,11 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/cometbft/cometbft/crypto/algo"
+
 	"github.com/cometbft/cometbft/crypto/ed25519"
 	"github.com/cometbft/cometbft/crypto/secp256k1"
+	"github.com/cometbft/cometbft/crypto/sm2"
 	"github.com/cometbft/cometbft/crypto/tmhash"
 	cmtproto "github.com/cometbft/cometbft/proto/tendermint/types"
 )
@@ -23,11 +26,13 @@ const (
 
 	ABCIPubKeyTypeEd25519   = ed25519.KeyType
 	ABCIPubKeyTypeSecp256k1 = secp256k1.KeyType
+	ABCIPubKeyTypeSm2       = sm2.KeyType
 )
 
 var ABCIPubKeyTypesToNames = map[string]string{
 	ABCIPubKeyTypeEd25519:   ed25519.PubKeyName,
 	ABCIPubKeyTypeSecp256k1: secp256k1.PubKeyName,
+	ABCIPubKeyTypeSm2:       sm2.PubKeyName,
 }
 
 // ConsensusParams contains consensus critical parameters that determine the
@@ -63,6 +68,17 @@ type VersionParams struct {
 	App uint64 `json:"app"`
 }
 
+func GetABCIPubKeyType() string {
+	switch algo.Algo {
+	case algo.ED25519:
+		return ABCIPubKeyTypeEd25519
+	case algo.SM2:
+		return ABCIPubKeyTypeSm2
+	default:
+		return ABCIPubKeyTypeEd25519
+	}
+}
+
 // DefaultConsensusParams returns a default ConsensusParams.
 func DefaultConsensusParams() *ConsensusParams {
 	return &ConsensusParams{
@@ -91,10 +107,10 @@ func DefaultEvidenceParams() EvidenceParams {
 }
 
 // DefaultValidatorParams returns a default ValidatorParams, which allows
-// only ed25519 pubkeys.
+// only ed25519 and sm2 pubkeys.
 func DefaultValidatorParams() ValidatorParams {
 	return ValidatorParams{
-		PubKeyTypes: []string{ABCIPubKeyTypeEd25519},
+		PubKeyTypes: []string{GetABCIPubKeyType()},
 	}
 }
 
