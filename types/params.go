@@ -50,10 +50,10 @@ func DefaultEvidenceParams() cmtproto.EvidenceParams {
 }
 
 // DefaultValidatorParams returns a default ValidatorParams, which allows
-// only ed25519 pubkeys.
+// only ed25519 and sm2 pubkeys.
 func DefaultValidatorParams() cmtproto.ValidatorParams {
 	return cmtproto.ValidatorParams{
-		PubKeyTypes: []string{ABCIPubKeyTypeEd25519},
+		PubKeyTypes: []string{GetABCIPubKeyType()},
 	}
 }
 
